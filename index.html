@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recibo</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--fuente, 'Courier New', monospace);
+    background: #eee;
+    margin: 0;
+    padding: 25px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recibo {
+    background: #fff;
+    width: 300px;
+    max-width: 100%;
+    padding: 18px 16px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--texto, #1a1a1a);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    border-radius: 4px;
+  }
+  .logo-wrap { text-align: center; margin-bottom: 8px; }
+  .logo-wrap img { max-width: 140px; max-height: 90px; object-fit: contain; }
+  .nombre-negocio {
+    text-align: center; font-size: 16px; font-weight: bold;
+    color: var(--acento, #1a1a1a); margin: 4px 0 2px 0;
+  }
+  .direccion-negocio { text-align: center; font-size: 11px; color: #555; margin-bottom: 10px; }
+  .linea { border-bottom: 1px dashed #999; margin: 10px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  thead th { text-align: left; font-size: 11px; border-bottom: 1px solid #1a1a1a; padding-bottom: 4px; }
+  thead th:last-child, tbody td:last-child { text-align: right; }
+  tbody td { padding: 3px 0; font-size: 12px; }
+  .total-box {
+    background: var(--acento, #1a1a1a); color: #fff; padding: 10px 12px;
+    border-radius: 4px; display: flex; justify-content: space-between;
+    font-size: 15px; font-weight: bold; margin-top: 10px;
+  }
+  .agradecimiento { text-align: center; font-size: 12px; margin-top: 14px; }
+  #btnImprimir {
+    width: 300px; max-width: 100%; margin-top: 16px; padding: 13px;
+    background: var(--acento, #1a73e8); color: #fff; border: none;
+    border-radius: 8px; font-size: 15px; font-weight: 600;
+    font-family: Arial, sans-serif; cursor: pointer;
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    #recibo { box-shadow: none; width: 100%; }
+    #btnImprimir { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div id="recibo">Cargando...</div>
+  <button id="btnImprimir" onclick="window.print()">🖨️ Imprimir Recibo</button>
 
+<script>
+  const p = new URLSearchParams(window.location.search);
+  const contenido = p.get('contenido');
+  const acento = p.get('acento');     // color principal, ej: %231a73e8
+  const fuente = p.get('fuente');     // ej: Arial o Courier New
+
+  if (acento) document.documentElement.style.setProperty('--acento', decodeURIComponent(acento));
+  if (fuente) document.documentElement.style.setProperty('--fuente', decodeURIComponent(fuente));
+
+  document.getElementById('recibo').innerHTML = contenido
+    ? decodeURIComponent(contenido)
+    : "<p style='text-align:center;color:#999'>No se recibió información.</p>";
+</script>
+</body>
+</html>
